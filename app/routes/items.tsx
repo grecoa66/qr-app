@@ -1,6 +1,7 @@
 import { createClient } from "pexels";
 import { useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { Image } from "../components/Image";
+import { items } from "~/data";
 
 const searchPhrases = [
   "dog",
@@ -137,7 +138,13 @@ function getRandomSearchTerm() {
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const { id } = params;
   if (!id) {
-    return { status: 404 };
+    throw new Response("no id supplied", { status: 404 });
+  }
+
+  const item = items.find((item) => item.id === id);
+
+  if (!item) {
+    throw new Response("no item found", { status: 404 });
   }
 
   const pexel_key = process.env.PEXEL_API_KEY;
@@ -161,15 +168,18 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     throw new Error(photo.error);
   }
 
-  return { id, photo };
+  return { id, item, photo };
 };
 
 export default function ItemPage() {
-  const { id, photo } = useLoaderData<typeof loader>();
+  const { id, item, photo } = useLoaderData<typeof loader>();
 
   return (
     <div>
       <h1>Item {id}</h1>
+      <p>Item Name: {item.name}</p>
+      <p>Manufacturing Location: {item["manufactured-location"]}</p>
+      <p>Last Person To Scan: {item["person-who-last-scanned"]}</p>
       {photo ? <Image src={photo.photos[0].src.medium} /> : null}
     </div>
   );

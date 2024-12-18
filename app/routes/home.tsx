@@ -1,5 +1,6 @@
 import { QRCodeSVG } from "qrcode.react";
 import type { Route } from "./+types/home";
+import { items } from "../data";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -13,7 +14,15 @@ export default function Home() {
     <div>
       <h1>QR Codes</h1>
       <p>Scan the QR code below</p>
-      <QRCodeSVG value="https://pleasant-especially-fox.ngrok-free.app/items/abc-123" />
+      <div className="flex flex-col gap-24">
+        {items.map((item) => (
+          <QRCodeSVG
+            key={item.id}
+            size={516}
+            value={`https://pleasant-especially-fox.ngrok-free.app/items/${item.id}`}
+          />
+        ))}
+      </div>
     </div>
   );
 }

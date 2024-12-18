@@ -1,13 +1,17 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "QR Codes" },
+    { name: "description", content: "QR Code Demo" },
   ];
 }
 
 export default function Home() {
-  return <Welcome />;
+  return (
+    <div>
+      <h1>QR Codes</h1>
+      <p>Scan the QR code below</p>
+    </div>
+  );
 }
